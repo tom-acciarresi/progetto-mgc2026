@@ -12,7 +12,7 @@ plugins {
 }
 
 javafx {
-    version = "25"
+    version = "25.0.3"
     modules = listOf("javafx.controls", "javafx.fxml")
 }
 
@@ -22,11 +22,6 @@ repositories {
 }
 
 dependencies {
-    // Use JUnit Jupiter for testing.
-    testImplementation(libs.junit.jupiter)
-
-    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-
     // This dependency is used by the application.
     implementation(libs.guava)
 }
@@ -41,9 +36,4 @@ java {
 application {
     // Define the main class for the application.
     mainClass = "it.unicam.cs.mpgc.rpg130730.EntryPoint"
-}
-
-tasks.named<Test>("test") {
-    // Use JUnit Platform for unit tests.
-    useJUnitPlatform()
 }
