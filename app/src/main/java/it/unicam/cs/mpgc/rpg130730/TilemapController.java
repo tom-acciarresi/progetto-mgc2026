@@ -9,32 +9,37 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 
 public class TilemapController {
-    public static final int TILE_SIZE = 16;
-    public static final int GRID_WIDTH = 10;
+    public static final int TILE_SIZE = 64;
+    public static final int GRID_WIDTH = 12;
     public static final int GRID_HEIGHT = 10;
 
     @FXML
-    GridPane gridPane;
+    private GridPane gridPane;
 
     private ImageView[][] tileset;
 
     @FXML
     public void initialize() {
-        tileset = new ImageView[MyApplicationView.WINDOW_HEIGHT /
-                TILE_SIZE][MyApplicationView.WINDOW_WIDTH / TILE_SIZE];
+        tileset = new ImageView[GRID_HEIGHT][GRID_WIDTH];
 
         for (Node node : gridPane.getChildren()) {
             Integer rowIndex = GridPane.getRowIndex(node);
             Integer columnIndex = GridPane.getColumnIndex(node);
 
-            tileset[rowIndex == null ? 0 : rowIndex][columnIndex == null ? 0 : columnIndex] = (ImageView) node;
+            if (node instanceof ImageView)
+                tileset[rowIndex == null ? 0 : rowIndex][columnIndex == null ? 0 : columnIndex] = (ImageView) node;
+            else
+                System.err.println("Not ImageView");
         }
 
-        Image testImage = new Image(getClass().getResource("testtile.png").toExternalForm());
+        Image testImage = new Image(getClass().getResource("testtile.png").toExternalForm(), 64.0, 64.0, true, false);
+        Image testImage2 = new Image(getClass().getResource("testtile2.png").toExternalForm(), 64.0, 64.0, true, false);
 
-        for (int i = 0; i < tileset.length; i++) {
-            for (int j = 0; j < tileset[0].length; j++) {
-                tileset[i][j].setImage(testImage);
+        for (int i = 0; i < GRID_HEIGHT; i++) {
+            for (int j = 0; j < GRID_WIDTH; j++) {
+                tileset[i][j].setImage(
+                        (i * GRID_HEIGHT + j) % 7 == 0 || (i * GRID_HEIGHT + j) % 13 == 0 ? testImage2 : testImage);
+                // System.out.println("i: " + i + "; j: " + j);
             }
         }
 
