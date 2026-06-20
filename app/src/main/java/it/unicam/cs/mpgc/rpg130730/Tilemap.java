@@ -13,7 +13,7 @@ import javafx.scene.layout.GridPane;
  *
  * @author Tommaso Acciarresi
  */
-public class TilemapController {
+public class Tilemap {
     public static final int TILE_SIZE = 64;
     public static final int GRID_WIDTH = 12;
     public static final int GRID_HEIGHT = 10;

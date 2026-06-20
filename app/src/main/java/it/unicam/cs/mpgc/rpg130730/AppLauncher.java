@@ -73,7 +73,7 @@ public class AppLauncher extends Application {
     private void loadFirstScene(Stage stage, SceneManager sceneManager) throws IOException {
         // TODO: Change
         // Add tiles
-        sceneManager.addNode(FXMLLoader.load(getClass().getResource("scenes/tilegrid.fxml")));
+        sceneManager.addNode(FXMLLoader.load(getClass().getResource("scenes/tilemap.fxml")));
         stage.sizeToScene();
 
         // Add player
