@@ -24,7 +24,7 @@ import javafx.util.Duration;
  * @author Tommaso Acciarresi
  */
 public class AppLauncher extends Application {
-    public static final boolean IS_FULLSCREEN = false, IS_RESIZABLE = true;
+    public static final boolean IS_RESIZABLE = false;
     public static final int WINDOW_WIDTH = 768, WINDOW_HEIGHT = 640;
     private static final int TARGET_FRAMERATE = 60;
     public static final String APPLICATION_TITLE = "New Game", ICON_FILENAME = "images/icon.png";
@@ -52,14 +52,13 @@ public class AppLauncher extends Application {
     private void setSettings(Stage stage) {
         // Set Window Settings
         stage.setTitle(APPLICATION_TITLE);
-        stage.setFullScreen(IS_FULLSCREEN);
         stage.setResizable(IS_RESIZABLE);
         // Set icon
         stage.getIcons().add(new Image(getClass().getResource(ICON_FILENAME).toExternalForm()));
     }
 
     private SceneManager instantiateSceneManager(Stage stage) {
-        SceneManager sceneManager = SceneManager.get_instance();
+        SceneManager sceneManager = new SceneManager();
         Scene scene = new Scene(sceneManager);
         stage.setScene(scene);
 
@@ -96,7 +95,7 @@ public class AppLauncher extends Application {
      */
     private void update(double timeDelta) {
         updateObjects(timeDelta);
-        System.out.println(keys);
+        // System.out.println(keys);
     }
 
     private void updateObjects(double timeDelta) {

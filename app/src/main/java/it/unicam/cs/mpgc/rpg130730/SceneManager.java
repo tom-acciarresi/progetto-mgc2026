@@ -9,19 +9,6 @@ import javafx.scene.Node;
  * @author Tommaso Acciarresi
  */
 public class SceneManager extends Group {
-    private static SceneManager instance = null;
-
-    private SceneManager() {
-    }
-
-    public static SceneManager get_instance() {
-        if (instance == null) {
-            instance = new SceneManager();
-        }
-
-        return instance;
-    }
-
     public boolean addNode(Node node) {
         return getChildren().add(node);
     }

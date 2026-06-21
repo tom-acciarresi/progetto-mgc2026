@@ -11,7 +11,12 @@
 ```bash
 git clone "https://github.com/tom-acciarresi/progetto-mgc2026.git";
 cd progetto-mgc2026 &&
-gradle build run
+gradle run
 ```
+
+### Controlli
+
+- W, A, S, D -- Movimento
+- ESC -- Esci dal gioco
 
 <img src="https://github.com/waltzaround/RAID/blob/main/assets/NO-AI.png" alt="No AI used in this project" width="128" height="128">

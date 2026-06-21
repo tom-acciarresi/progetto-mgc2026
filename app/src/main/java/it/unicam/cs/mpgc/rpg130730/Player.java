@@ -1,5 +1,6 @@
 package it.unicam.cs.mpgc.rpg130730;
 
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -14,7 +15,7 @@ public class Player implements Updatable {
     @FXML
     private ImageView playerSprite;
 
-    private final int SPEED = 200; // px/s
+    private final int SPEED = 400; // px/s
 
     private Tuple<Integer, Integer> input;
     private double x, y;
@@ -28,12 +29,19 @@ public class Player implements Updatable {
     }
 
     private void handleInput(double timeDelta) {
+        handleMovement(timeDelta);
+
+        if (AppLauncher.keys.getOrDefault(KeyCode.ESCAPE, false))
+            Platform.exit();
+    }
+
+    private void handleMovement(double timeDelta) {
         input = new Tuple<Integer, Integer>(
                 (AppLauncher.keys.getOrDefault(KeyCode.A, false) ? -1 : 0)
                         + (AppLauncher.keys.getOrDefault(KeyCode.D, false) ? +1 : 0),
                 (AppLauncher.keys.getOrDefault(KeyCode.W, false) ? -1 : 0)
                         + (AppLauncher.keys.getOrDefault(KeyCode.S, false) ? +1 : 0));
-        System.out.println(input);
+        // System.out.println(input);
 
         move(input, timeDelta);
         // System.out.println("x: " + x + "; y: " + y);
