@@ -2,7 +2,8 @@ package it.unicam.cs.mpgc.rpg130730.entities;
 
 import java.util.HashMap;
 
-import it.unicam.cs.mpgc.rpg130730.AppLauncher;
+import it.unicam.cs.mpgc.rpg130730.util.GlobalConstants;
+import it.unicam.cs.mpgc.rpg130730.util.InputMap;
 import it.unicam.cs.mpgc.rpg130730.util.Tuple;
 import it.unicam.cs.mpgc.rpg130730.util.Updatable;
 import javafx.application.Platform;
@@ -21,7 +22,7 @@ public class Player extends StackPane implements Updatable {
 
     private static final int SPEED = 400; // px/s
 
-    private Rectangle playerSprite = new Rectangle(AppLauncher.TILE_SIZE, AppLauncher.TILE_SIZE);
+    private Rectangle playerSprite = new Rectangle(GlobalConstants.TILE_SIZE, GlobalConstants.TILE_SIZE);
 
     private Tuple<Integer, Integer> input = new Tuple<Integer, Integer>(0, 0);
     private Tuple<Double, Double> position = new Tuple<Double, Double>(0.0, 0.0);
@@ -54,7 +55,7 @@ public class Player extends StackPane implements Updatable {
     }
 
     private Tuple<Integer, Integer> getInput() {
-        HashMap<KeyCode, Boolean> currentlyPressedKeys = AppLauncher.getCurrentlyPressedKeys();
+        HashMap<KeyCode, Boolean> currentlyPressedKeys = InputMap.getCurrentlyPressedKeys();
         return new Tuple<Integer, Integer>(
                 (currentlyPressedKeys.getOrDefault(KeyCode.A, false) ? -1 : 0)
                         + (currentlyPressedKeys.getOrDefault(KeyCode.D, false) ? +1 : 0),
@@ -64,7 +65,7 @@ public class Player extends StackPane implements Updatable {
 
     // TODO Move elsewhere
     private void checkIfExitPressed() {
-        if (AppLauncher.getCurrentlyPressedKeys().getOrDefault(KeyCode.ESCAPE, false))
+        if (InputMap.getCurrentlyPressedKeys().getOrDefault(KeyCode.ESCAPE, false))
             Platform.exit();
     }
 
@@ -73,11 +74,11 @@ public class Player extends StackPane implements Updatable {
             return;
         double r = SPEED * timeDelta;
         // WHY ARE THIS FUNCTION'S INPUTS INVERTED??? WHO PUTS Y BEFORE X???
-        double angle = Math.atan2(input.y, input.x);
+        double angle = Math.atan2(input.y(), input.x());
 
         setPosition(new Tuple<Double, Double>(
-                position.x + r * Math.cos(angle),
-                position.y + r * Math.sin(angle)));
+                position.x() + r * Math.cos(angle),
+                position.y() + r * Math.sin(angle)));
     }
 
     public void setPosition(Tuple<Double, Double> pos) {
@@ -100,7 +101,7 @@ public class Player extends StackPane implements Updatable {
     }
 
     private void updateSprite() {
-        this.setTranslateX(position.x);
-        this.setTranslateY(position.y);
+        this.setTranslateX(position.x());
+        this.setTranslateY(position.y());
     };
 }

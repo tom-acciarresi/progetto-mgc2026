@@ -2,12 +2,12 @@ package it.unicam.cs.mpgc.rpg130730;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-
 import org.jspecify.annotations.Nullable;
 
 import it.unicam.cs.mpgc.rpg130730.entities.Player;
 import it.unicam.cs.mpgc.rpg130730.environment.Tilemap;
+import it.unicam.cs.mpgc.rpg130730.util.GlobalConstants;
+import it.unicam.cs.mpgc.rpg130730.util.InputMap;
 import it.unicam.cs.mpgc.rpg130730.util.SceneManager;
 import it.unicam.cs.mpgc.rpg130730.util.Tuple;
 import it.unicam.cs.mpgc.rpg130730.util.Updatable;
@@ -16,7 +16,6 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.application.Application;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import javafx.util.Duration;
@@ -29,16 +28,7 @@ import javafx.util.Duration;
  * @author Tommaso Acciarresi
  */
 public class AppLauncher extends Application {
-    public static final int TILE_SIZE = 64;
-    public static final int GRID_WIDTH = 12;
-    public static final int GRID_HEIGHT = 10;
 
-    public static final boolean IS_RESIZABLE = false;
-    public static final int WINDOW_WIDTH = 768, WINDOW_HEIGHT = 640;
-    public static final int TARGET_FRAMERATE = 60;
-    public static final String APPLICATION_TITLE = "New Game", ICON_FILENAME = "/images/icon.png";
-
-    private static HashMap<KeyCode, Boolean> keys = new HashMap<KeyCode, Boolean>();
     private static ArrayList<Updatable> objectsToUpdate = new ArrayList<Updatable>();
 
     @Override
@@ -59,18 +49,14 @@ public class AppLauncher extends Application {
         return objectsToUpdate.add(obj);
     }
 
-    public static HashMap<KeyCode, Boolean> getCurrentlyPressedKeys() {
-        return keys;
-    }
-
     private void setSettings(Stage stage) {
         // Set Window Settings
-        stage.setWidth(WINDOW_WIDTH);
-        stage.setHeight(WINDOW_HEIGHT);
-        stage.setTitle(APPLICATION_TITLE);
-        stage.setResizable(IS_RESIZABLE);
+        stage.setWidth(GlobalConstants.WINDOW_WIDTH);
+        stage.setHeight(GlobalConstants.WINDOW_HEIGHT);
+        stage.setTitle(GlobalConstants.APPLICATION_TITLE);
+        stage.setResizable(GlobalConstants.IS_RESIZABLE);
         // Set icon
-        stage.getIcons().add(new Image(getClass().getResource(ICON_FILENAME).toExternalForm()));
+        stage.getIcons().add(new Image(getClass().getResource(GlobalConstants.ICON_FILENAME).toExternalForm()));
     }
 
     private SceneManager instantiateSceneManager(Stage stage) {
@@ -79,8 +65,8 @@ public class AppLauncher extends Application {
         stage.setScene(scene);
 
         // Register key presses
-        stage.getScene().setOnKeyPressed(e -> keys.put(e.getCode(), true));
-        stage.getScene().setOnKeyReleased(e -> keys.put(e.getCode(), false));
+        stage.getScene().setOnKeyPressed(e -> InputMap.getCurrentlyPressedKeys().put(e.getCode(), true));
+        stage.getScene().setOnKeyReleased(e -> InputMap.getCurrentlyPressedKeys().put(e.getCode(), false));
 
         return sceneManager;
     }
@@ -92,8 +78,8 @@ public class AppLauncher extends Application {
 
         // Add player
         Player tempPlayer = new Player(new Tuple<Double, Double>(
-                (WINDOW_WIDTH - TILE_SIZE) / 2.0,
-                (WINDOW_HEIGHT - TILE_SIZE) / 2.0));
+                (GlobalConstants.WINDOW_WIDTH - GlobalConstants.TILE_SIZE) / 2.0,
+                (GlobalConstants.WINDOW_HEIGHT - GlobalConstants.TILE_SIZE) / 2.0));
         sceneManager.addChild(tempPlayer);
 
         stage.sizeToScene();
@@ -101,7 +87,8 @@ public class AppLauncher extends Application {
 
     private void startLoop(Stage stage) {
         Timeline loop = new Timeline(
-                new KeyFrame(Duration.seconds(1.0 / TARGET_FRAMERATE), e -> update(1.0 / TARGET_FRAMERATE)));
+                new KeyFrame(Duration.seconds(1.0 / GlobalConstants.TARGET_FRAMERATE),
+                        e -> update(1.0 / GlobalConstants.TARGET_FRAMERATE)));
         loop.setCycleCount(Animation.INDEFINITE);
         loop.play();
     }
