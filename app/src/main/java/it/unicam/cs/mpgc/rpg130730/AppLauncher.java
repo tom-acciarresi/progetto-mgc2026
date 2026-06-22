@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import org.jspecify.annotations.Nullable;
+
 import it.unicam.cs.mpgc.rpg130730.entities.Player;
 import it.unicam.cs.mpgc.rpg130730.environment.Tilemap;
 import it.unicam.cs.mpgc.rpg130730.util.SceneManager;
@@ -40,7 +42,8 @@ public class AppLauncher extends Application {
     private static ArrayList<Updatable> objectsToUpdate = new ArrayList<Updatable>();
 
     @Override
-    public void start(Stage stage) throws IOException {
+    public void start(@Nullable Stage defaultStage) throws IOException {
+        Stage stage = new Stage();
         setSettings(stage);
 
         SceneManager sceneManager = instantiateSceneManager(stage);
@@ -62,6 +65,8 @@ public class AppLauncher extends Application {
 
     private void setSettings(Stage stage) {
         // Set Window Settings
+        stage.setWidth(WINDOW_WIDTH);
+        stage.setHeight(WINDOW_HEIGHT);
         stage.setTitle(APPLICATION_TITLE);
         stage.setResizable(IS_RESIZABLE);
         // Set icon
@@ -106,7 +111,6 @@ public class AppLauncher extends Application {
      */
     private void update(double timeDelta) {
         updateObjects(timeDelta);
-        // System.out.println(keys);
     }
 
     private void updateObjects(double timeDelta) {

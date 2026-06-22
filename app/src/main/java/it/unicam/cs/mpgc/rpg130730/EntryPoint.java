@@ -2,7 +2,7 @@ package it.unicam.cs.mpgc.rpg130730;
 
 /**
  * Class where code execution begins
- * 
+ *
  * @author Tommaso Acciarresi
  */
 public class EntryPoint {

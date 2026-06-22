@@ -1,4 +1,12 @@
-{
-    "1": "testtile.png",
-    "2": "testtile2.png"
-}
+[
+    {
+        "index": 1,
+        "fileName": "testtile.png",
+        "isCollidable": "false"
+    },
+    {
+        "index": 2,
+        "fileName": "testtile2.png",
+        "isCollidable": "false"
+    }
+]

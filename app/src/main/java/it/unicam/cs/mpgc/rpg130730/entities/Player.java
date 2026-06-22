@@ -23,8 +23,10 @@ public class Player extends StackPane implements Updatable {
 
     private Rectangle playerSprite = new Rectangle(AppLauncher.TILE_SIZE, AppLauncher.TILE_SIZE);
 
-    private Tuple<Integer, Integer> input;
-    private Tuple<Double, Double> position;
+    private Tuple<Integer, Integer> input = new Tuple<Integer, Integer>(0, 0);
+    private Tuple<Double, Double> position = new Tuple<Double, Double>(0.0, 0.0);
+
+    private boolean acceptsInput = true;
 
     public Player(Tuple<Double, Double> position) {
         subscribeToUpdates();
@@ -45,18 +47,22 @@ public class Player extends StackPane implements Updatable {
     }
 
     private void handleMovement(double timeDelta) {
+        input = acceptsInput
+                ? getInput()
+                : new Tuple<Integer, Integer>(0, 0);
+        move(input, timeDelta);
+    }
+
+    private Tuple<Integer, Integer> getInput() {
         HashMap<KeyCode, Boolean> currentlyPressedKeys = AppLauncher.getCurrentlyPressedKeys();
-        input = new Tuple<Integer, Integer>(
+        return new Tuple<Integer, Integer>(
                 (currentlyPressedKeys.getOrDefault(KeyCode.A, false) ? -1 : 0)
                         + (currentlyPressedKeys.getOrDefault(KeyCode.D, false) ? +1 : 0),
                 (currentlyPressedKeys.getOrDefault(KeyCode.W, false) ? -1 : 0)
                         + (currentlyPressedKeys.getOrDefault(KeyCode.S, false) ? +1 : 0));
-        // System.out.println(input);
-
-        move(input, timeDelta);
-        // System.out.println("x: " + x + "; y: " + y);
     }
 
+    // TODO Move elsewhere
     private void checkIfExitPressed() {
         if (AppLauncher.getCurrentlyPressedKeys().getOrDefault(KeyCode.ESCAPE, false))
             Platform.exit();

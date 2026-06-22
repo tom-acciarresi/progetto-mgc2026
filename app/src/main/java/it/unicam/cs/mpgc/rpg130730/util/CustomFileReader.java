@@ -19,6 +19,6 @@ public class CustomFileReader {
         }
 
         System.err.println("Error reading file");
-        return null;
+        return "";
     }
 }

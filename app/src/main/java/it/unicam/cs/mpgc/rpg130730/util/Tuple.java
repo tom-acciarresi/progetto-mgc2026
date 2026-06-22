@@ -1,5 +1,7 @@
 package it.unicam.cs.mpgc.rpg130730.util;
 
+import org.jspecify.annotations.Nullable;
+
 /**
  * Tuple datatype cause java still doesn't have these apparently
  *
@@ -20,7 +22,7 @@ public class Tuple<X, Y> {
     }
 
     @Override
-    public boolean equals(Object obj) {
+    public boolean equals(@Nullable Object obj) {
         if (obj == this)
             return true;
         if (!(obj instanceof Tuple<?, ?>))
