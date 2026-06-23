@@ -5,9 +5,9 @@ import java.util.HashMap;
 import javafx.scene.input.KeyCode;
 
 public class InputMap {
-        public static HashMap<KeyCode, Boolean> keys = new HashMap<KeyCode, Boolean>();
+    private static HashMap<KeyCode, Boolean> keys = new HashMap<KeyCode, Boolean>();
 
-        public static HashMap<KeyCode, Boolean> getCurrentlyPressedKeys() {
-            return keys;
-        }
+    public static HashMap<KeyCode, Boolean> getCurrentlyPressedKeys() {
+        return keys;
+    }
 }

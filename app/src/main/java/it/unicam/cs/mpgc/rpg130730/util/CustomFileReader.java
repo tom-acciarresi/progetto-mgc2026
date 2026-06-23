@@ -11,8 +11,8 @@ import java.io.InputStream;
 public class CustomFileReader {
 
     public String readFile(String filepath) {
+        InputStream resourceAsStream = getClass().getResourceAsStream(filepath);
         try {
-            InputStream resourceAsStream = getClass().getResourceAsStream(filepath);
             return new String(resourceAsStream.readAllBytes());
         } catch (IOException e) {
             e.printStackTrace();

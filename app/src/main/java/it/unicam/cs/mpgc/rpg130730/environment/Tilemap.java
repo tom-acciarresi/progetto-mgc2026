@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import it.unicam.cs.mpgc.rpg130730.util.CustomFileReader;
+import it.unicam.cs.mpgc.rpg130730.util.CustomImageLoader;
 import it.unicam.cs.mpgc.rpg130730.util.GlobalConstants;
 import it.unicam.cs.mpgc.rpg130730.util.Tuple;
 import javafx.scene.image.Image;
@@ -23,7 +24,7 @@ import javafx.scene.shape.Rectangle;
  */
 public class Tilemap extends GridPane {
 
-    private HashMap<Integer, ImagePattern> tileDictionary = new HashMap<Integer, ImagePattern>();
+    private HashMap<Integer, Image> tileDictionary = new HashMap<Integer, Image>();
 
     private Tile[][] tiles = new Tile[GlobalConstants.GRID_HEIGHT][GlobalConstants.GRID_WIDTH];
 
@@ -56,10 +57,11 @@ public class Tilemap extends GridPane {
         TypeToken<ArrayList<HashMap<String, String>>> mapType = new TypeToken<ArrayList<HashMap<String, String>>>() {
         };
         ArrayList<HashMap<String, String>> map = gson.fromJson(fileOut, mapType);
+
+        CustomImageLoader il = new CustomImageLoader();
         for (HashMap<String, String> tileData : map) {
-            tileDictionary.put(Integer.valueOf(tileData.get("index")), new ImagePattern(
-                    new Image(getClass().getResource(GlobalConstants.TILE_DIR_PREFIX + tileData.get("fileName"))
-                            .toExternalForm())));
+            tileDictionary.put(Integer.valueOf(tileData.get("index")),
+                    il.loadImage(GlobalConstants.TILE_DIR_PREFIX + tileData.get("fileName")));
         }
     }
 
@@ -70,20 +72,20 @@ public class Tilemap extends GridPane {
     private void setTileMapTo(int[] tileLayoutBitmap) {
         for (int i = 0; i < GlobalConstants.GRID_HEIGHT; i++) {
             for (int j = 0; j < GlobalConstants.GRID_WIDTH; j++) {
-                ImagePattern newSprite = tileDictionary.get(tileLayoutBitmap[i * GlobalConstants.GRID_WIDTH + j]);
+                Image newSprite = tileDictionary.get(tileLayoutBitmap[i * GlobalConstants.GRID_WIDTH + j]);
 
                 if (newSprite == null) {
                     System.err.println("Null sprite");
                     return;
                 }
 
-                tiles[i][j].getSprite().setFill(newSprite);
+                tiles[i][j].getSprite().setFill(new ImagePattern(newSprite));
             }
         }
     }
 
-    public void setTile(Tuple<Integer, Integer> coords, ImagePattern img) {
-        tiles[coords.x()][coords.y()].getSprite().setFill(img);
+    public void setTile(Tuple<Integer, Integer> coords, Image img) {
+        tiles[coords.x()][coords.y()].getSprite().setFill(new ImagePattern(img));
     }
 
     private int[] loadTileBitmapFromTextFile(String filepath) {
@@ -100,7 +102,7 @@ public class Tilemap extends GridPane {
     }
 
     public class Tile extends StackPane {
-        private Rectangle sprite = new Rectangle(64, 64);
+        private Rectangle sprite = new Rectangle(GlobalConstants.TILE_SIZE, GlobalConstants.TILE_SIZE);
         // private boolean isCollidable;
 
         public Tile() {

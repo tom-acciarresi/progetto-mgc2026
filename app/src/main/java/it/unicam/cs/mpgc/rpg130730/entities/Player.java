@@ -2,6 +2,7 @@ package it.unicam.cs.mpgc.rpg130730.entities;
 
 import java.util.HashMap;
 
+import it.unicam.cs.mpgc.rpg130730.util.CustomImageLoader;
 import it.unicam.cs.mpgc.rpg130730.util.GlobalConstants;
 import it.unicam.cs.mpgc.rpg130730.util.InputMap;
 import it.unicam.cs.mpgc.rpg130730.util.Tuple;
@@ -20,8 +21,6 @@ import javafx.scene.shape.Rectangle;
  */
 public class Player extends StackPane implements Updatable {
 
-    private static final int SPEED = 400; // px/s
-
     private Rectangle playerSprite = new Rectangle(GlobalConstants.TILE_SIZE, GlobalConstants.TILE_SIZE);
 
     private Tuple<Integer, Integer> input = new Tuple<Integer, Integer>(0, 0);
@@ -34,7 +33,9 @@ public class Player extends StackPane implements Updatable {
         getChildren().add(playerSprite);
 
         setPosition(position);
-        setSprite("/images/player.png");
+
+        CustomImageLoader il = new CustomImageLoader();
+        setSprite(il.loadImage("/images/player.png"));
     }
 
     public void update(double timeDelta) {
@@ -63,7 +64,6 @@ public class Player extends StackPane implements Updatable {
                         + (currentlyPressedKeys.getOrDefault(KeyCode.S, false) ? +1 : 0));
     }
 
-    // TODO Move elsewhere
     private void checkIfExitPressed() {
         if (InputMap.getCurrentlyPressedKeys().getOrDefault(KeyCode.ESCAPE, false))
             Platform.exit();
@@ -72,7 +72,7 @@ public class Player extends StackPane implements Updatable {
     public void move(Tuple<Integer, Integer> input, double timeDelta) {
         if (input.equals(new Tuple<Integer, Integer>(0, 0)))
             return;
-        double r = SPEED * timeDelta;
+        double r = GlobalConstants.PLAYER_SPEED * timeDelta;
         // WHY ARE THIS FUNCTION'S INPUTS INVERTED??? WHO PUTS Y BEFORE X???
         double angle = Math.atan2(input.y(), input.x());
 
@@ -91,17 +91,28 @@ public class Player extends StackPane implements Updatable {
         playerSprite.setFill(new ImagePattern(image));
     }
 
-    public void setSprite(String filepath) {
-        setSprite(loadSprite(filepath));
-    }
+    // public void setSprite(String filepath) {
+    // setSprite(loadSprite(filepath));
+    // }
 
-    private Image loadSprite(String filepath) {
-        return new Image(getClass().getResource(filepath).toExternalForm());
+    // private Image loadSprite(String filepath) {
+    // return new Image(getClass().getResource(filepath).toExternalForm());
 
-    }
+    // }
 
     private void updateSprite() {
         this.setTranslateX(position.x());
         this.setTranslateY(position.y());
     };
+
+    // public class PlayerView {
+    // private Rectangle playerSprite = new Rectangle(GlobalConstants.TILE_SIZE,
+    // GlobalConstants.TILE_SIZE);
+
+    // private void updateSprite() {
+    // this.setTranslateX(position.x());
+    // this.setTranslateY(position.y());
+    // };
+    // }
+
 }

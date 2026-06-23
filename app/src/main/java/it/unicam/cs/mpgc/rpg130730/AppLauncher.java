@@ -1,24 +1,19 @@
 package it.unicam.cs.mpgc.rpg130730;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import org.jspecify.annotations.Nullable;
 
 import it.unicam.cs.mpgc.rpg130730.entities.Player;
 import it.unicam.cs.mpgc.rpg130730.environment.Tilemap;
+import it.unicam.cs.mpgc.rpg130730.util.CustomImageLoader;
+import it.unicam.cs.mpgc.rpg130730.util.GameLoop;
 import it.unicam.cs.mpgc.rpg130730.util.GlobalConstants;
 import it.unicam.cs.mpgc.rpg130730.util.InputMap;
 import it.unicam.cs.mpgc.rpg130730.util.SceneManager;
 import it.unicam.cs.mpgc.rpg130730.util.Tuple;
-import it.unicam.cs.mpgc.rpg130730.util.Updatable;
-import javafx.animation.Animation;
-import javafx.animation.KeyFrame;
-import javafx.animation.Timeline;
 import javafx.application.Application;
-import javafx.scene.image.Image;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /**
  * Creates application window and populates it with the first scene
@@ -29,24 +24,21 @@ import javafx.util.Duration;
  */
 public class AppLauncher extends Application {
 
-    private static ArrayList<Updatable> objectsToUpdate = new ArrayList<Updatable>();
+    private Stage stage = new Stage();
 
     @Override
     public void start(@Nullable Stage defaultStage) throws IOException {
-        Stage stage = new Stage();
         setSettings(stage);
 
         SceneManager sceneManager = instantiateSceneManager(stage);
 
+        setInputListeners();
+
         loadFirstScene(stage, sceneManager);
 
-        startLoop(stage);
+        GameLoop.startLoop(stage);
 
         stage.show();
-    }
-
-    public static boolean subscribeToUpdates(Updatable obj) {
-        return objectsToUpdate.add(obj);
     }
 
     private void setSettings(Stage stage) {
@@ -56,7 +48,8 @@ public class AppLauncher extends Application {
         stage.setTitle(GlobalConstants.APPLICATION_TITLE);
         stage.setResizable(GlobalConstants.IS_RESIZABLE);
         // Set icon
-        stage.getIcons().add(new Image(getClass().getResource(GlobalConstants.ICON_FILENAME).toExternalForm()));
+        CustomImageLoader il = new CustomImageLoader();
+        stage.getIcons().add(il.loadImage(GlobalConstants.ICON_FILENAME));
     }
 
     private SceneManager instantiateSceneManager(Stage stage) {
@@ -64,48 +57,25 @@ public class AppLauncher extends Application {
         Scene scene = new Scene(sceneManager);
         stage.setScene(scene);
 
-        // Register key presses
-        stage.getScene().setOnKeyPressed(e -> InputMap.getCurrentlyPressedKeys().put(e.getCode(), true));
-        stage.getScene().setOnKeyReleased(e -> InputMap.getCurrentlyPressedKeys().put(e.getCode(), false));
-
         return sceneManager;
     }
 
-    private void loadFirstScene(Stage stage, SceneManager sceneManager) throws IOException {
+    private void setInputListeners() {
+        stage.getScene().setOnKeyPressed(e -> InputMap.getCurrentlyPressedKeys().put(e.getCode(), true));
+        stage.getScene().setOnKeyReleased(e -> InputMap.getCurrentlyPressedKeys().put(e.getCode(), false));
+    }
+
+    private void loadFirstScene(Stage stage, SceneManager sceneManager) {
         // TODO: Change
         // Add tiles
-        sceneManager.addChild(new Tilemap("/text/layout.txt"));
+        Tilemap firstTilemap = new Tilemap("/text/layout.txt");
+        sceneManager.addChild(firstTilemap);
 
         // Add player
         Player tempPlayer = new Player(new Tuple<Double, Double>(
                 (GlobalConstants.WINDOW_WIDTH - GlobalConstants.TILE_SIZE) / 2.0,
                 (GlobalConstants.WINDOW_HEIGHT - GlobalConstants.TILE_SIZE) / 2.0));
         sceneManager.addChild(tempPlayer);
-
-        stage.sizeToScene();
     }
 
-    private void startLoop(Stage stage) {
-        Timeline loop = new Timeline(
-                new KeyFrame(Duration.seconds(1.0 / GlobalConstants.TARGET_FRAMERATE),
-                        e -> update(1.0 / GlobalConstants.TARGET_FRAMERATE)));
-        loop.setCycleCount(Animation.INDEFINITE);
-        loop.play();
-    }
-
-    /**
-     * Called 60 times per second (hopefully) at `timeDelta` intervals
-     */
-    private void update(double timeDelta) {
-        updateObjects(timeDelta);
-    }
-
-    private void updateObjects(double timeDelta) {
-        for (Updatable object : objectsToUpdate) {
-            if (object != null)
-                object.update(timeDelta);
-            else
-                System.err.println("Null updatable object");
-        }
-    }
 }
