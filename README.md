@@ -1,5 +1,7 @@
 # progetto-mdc2026
 
+<img src="screenshot.png" width="1920">
+
 ## Prerequisiti
 - Java 25 (LTS)
 - Gradle
@@ -25,6 +27,6 @@ gradle run
 
 ---
 
-<img src="image.png" width="1000">
+<img src="image.png" width="1920">
 
 <img src="https://github.com/waltzaround/RAID/blob/main/assets/NO-AI.png" alt="No AI used in this project" width="256">

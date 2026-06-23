@@ -59,7 +59,7 @@ public class Player extends StackPane implements Updatable, Movable {
         setPosition(position);
 
         CustomImageLoader il = new CustomImageLoader();
-        setSprite(il.loadImage("/images/player.png"));
+        setSprite(il.loadImage("/images/knight/down.png"));
     }
 
     public void update(double timeDelta) {
